@@ -29,7 +29,10 @@ const ValueType& Vector::operator[](const size_t i) const {
 void Vector::pushBack(const ValueType& value) {
     _size++;
     ValueType* newData = new ValueType[_size];
-    newData[_size + 1] = value;
+    for (int i = 0; i < _size - 1; i++) {
+        newData[i] = _data[i];
+    }
+    newData[_size - 1] = value;
     delete _data;
     _data = newData;
 }
@@ -61,7 +64,7 @@ void Vector::insert(const ValueType& value, size_t idx) {
 
 
 void Vector::clear() {
-    _data = nullptr;
+    delete[] _data;
     _size = 0;
 }
 
