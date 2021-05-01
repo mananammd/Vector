@@ -5,9 +5,10 @@ class Vector: public IVector
 private:
     ValueType* _data ;
 	size_t _size;
+    size_t _capacity;
 
 public:
-	Vector(ValueType* data);
+	Vector(size_t size, ValueType value);
 
     ValueType& at(size_t idx) override;
     const ValueType& at(size_t idx) const override;

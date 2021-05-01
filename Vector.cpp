@@ -27,25 +27,36 @@ const ValueType& Vector::operator[](const size_t i) const {
 
 
 void Vector::pushBack(const ValueType& value) {
-    _data[_size + 1] = value;
+    _size++;
+    ValueType* newData = new ValueType[_size];
+    newData[_size + 1] = value;
+    delete _data;
+    _data = newData;
 }
 
 void Vector::pushFront(const ValueType& value) {
     _size++;
-    _data[_size];
+    ValueType* newData = new ValueType[_size];
     for(int i = 1; i < _size; i++) {
-        _data[i] = _data[i - 1];
+        newData[i] = _data[i - 1];
     }
-    _data[0] = value;
+    newData[0] = value;
+    delete[] _data;
+    _data = newData;
 }
 
 void Vector::insert(const ValueType& value, size_t idx) {
     _size++;
-    _data[_size];
-    for (int i = idx + 1; i < _size; i++) {
-        _data[i] = _data[i - 1];
+    ValueType* newData = new ValueType[_size];
+    for (int i = 0; i < idx; i++) {
+        newData[i] = _data[i];
     }
-    _data[idx] = value;
+    newData[idx] = value;
+    for (int i = idx + 1; i < _size; i++) {
+        newData[i] = _data[i-1];
+    }
+    delete[] _data;
+    _data = newData;
 }
 
 
@@ -55,26 +66,39 @@ void Vector::clear() {
 }
 
 void Vector::erase(size_t i) {
-    for (int j = i; j < _size - i - 1; j++) {
-        _data[j] = _data[j + 1]; 
-    }
-    _data[_size] = 0;
     _size--;
+    ValueType* newData = new ValueType[_size];
+    for (int j = 0; j < i; j++) {
+        newData[j] = _data[j]; 
+    }
+    for (int j = i + 1; j < _size + 1; j++) {
+        newData[j - 1] = _data[j];
+    }
+    delete[] _data;
+    _data = newData;
 }
 
 void Vector::erase(size_t i, size_t len) {
-    for (int j = i; j < _size - len - 1; j++) {
-        _data[j] = _data[j + 1];
-    }
     _size -= len;
-    for (int j = _size; j < _size + len; j++) {
-        _data[j] = 0;
+    ValueType* newData = new ValueType[_size];
+    for (int j = 0; j < i; j++) {
+        newData[j] = _data[j];
     }
+    for (int j = i + len ; j < _size + len; j++) {
+        newData[j - len] = _data[j];
+    }
+    delete[] _data;
+    _data = newData;
 }
 
 void Vector::popBack() {
-    _data[_size] = 0;
     _size--;
+    ValueType* newData = new ValueType[_size];
+    for (int i = 0; i < _size; i++) {
+        newData[i] = _data[i];
+    }
+    delete[] _data;
+    _data = newData;
 }
 
 
@@ -94,5 +118,5 @@ size_t Vector::find(const ValueType& value) const {
 
 Vector::~Vector() {
     _size = 0;
-    _data = nullptr;
+    delete[] _data;
 }
