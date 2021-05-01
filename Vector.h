@@ -28,5 +28,5 @@ public:
     
     size_t find(const ValueType& value) const override;
 
-    ~Vector() = default;
+    ~Vector() override;
 };
