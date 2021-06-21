@@ -7,9 +7,9 @@ MyVector<T>::MyVector(size_t size, ResizeStrategy strategy, float coef) {
     _coef = coef;
     strategyExpand(_strategy, _coef);
     _data = new T[_capacity];
-	for(size_t i = 0; i < _size; ++i) {
-		_data[i] = T();
-	}
+    for(size_t i = 0; i < _size; ++i) {
+	_data[i] = T();
+    }
 }
 
 template<class T>
@@ -19,16 +19,16 @@ MyVector<T>::MyVector(size_t size, T value, ResizeStrategy strategy, float coef)
     _coef = coef;
     strategyExpand(_strategy, _coef);
     _data = new T[_capacity];
-	for(size_t i = 0; i < _size; ++i) {
-		_data[i] = value;
-	}
+    for(size_t i = 0; i < _size; ++i) {
+	_data[i] = value;
+    }
 }
 
 template<class T>
 MyVector<T>::MyVector(const MyVector& copy) {
     _size = copy._size;
-	_capacity = copy._capacity;
-	_coef = copy._coef;
+    _capacity = copy._capacity;
+    _coef = copy._coef;
     _data = new T[_capacity];
     for (size_t i = 0; i < _size; ++i) {
         _data[i] = copy[i];
@@ -83,9 +83,6 @@ template<class T>
 MyVector<T>::~MyVector() {
     delete[] _data;
     _data = nullptr;
-    _size = 0;
-    _capacity = 0;
-    _coef = 0;
 }
 
 template<class T>
@@ -129,18 +126,18 @@ typename MyVector<T>::ConstVectorIterator MyVector<T>::cend() const {
 template<class T>
 T& MyVector<T>::operator[](const size_t idx) {
     if (idx >= _size) {
-		throw std::out_of_range("Called [idx] : idx >= size of vector");
-	}
-	return _data[idx];
+	throw std::out_of_range("Called [idx] : idx >= size of vector");
+    }
+    return _data[idx];
 
 }
 
 template<class T>
 const T& MyVector<T>::operator[](const size_t idx) const {
     if (idx >= _size) {
-		throw std::out_of_range("Called [idx] : idx >= size of vector");
-	}
-	return _data[idx];
+	throw std::out_of_range("Called [idx] : idx >= size of vector");
+    }
+    return _data[idx];
 }
 
 template<class T>
@@ -156,8 +153,8 @@ void MyVector<T>::pushFront(const T& value) {
 template<class T>
 void MyVector<T>::insert(const size_t idx, const T& value) {
     if (idx >= _size) {
-		throw std::out_of_range("Called insert(idx) : idx >= size of vector");
-	}
+	throw std::out_of_range("Called insert(idx) : idx >= size of vector");
+    }
     _size++;
     if (_size >= _capacity) {
         expand();
@@ -171,8 +168,8 @@ void MyVector<T>::insert(const size_t idx, const T& value) {
 template<class T>
 void MyVector<T>::insert(const size_t idx, const MyVector& value) {
     if (idx >= _size) {
-		throw std::out_of_range("Called insert(idx) : idx >= size of vector");
-	}
+	throw std::out_of_range("Called insert(idx) : idx >= size of vector");
+    }
     _size += value._size;
     if (_size >= _capacity) {
         expand();
@@ -188,20 +185,20 @@ void MyVector<T>::insert(const size_t idx, const MyVector& value) {
 template<class T>
 void MyVector<T>::insert(ConstVectorIterator it, const T& value) {
     size_t idx = 0;
-	MyVector<T>::ConstVectorIterator tmp = cbegin(); 
+    MyVector<T>::ConstVectorIterator tmp = cbegin(); 
     while ((tmp != cend()) || (tmp != it)) {
-		idx++;
+	idx++;
         tmp++;
     }
-	insert(idx, value);
+    insert(idx, value);
 }
 
 template<class T>
 void MyVector<T>::insert(ConstVectorIterator it, const MyVector& value) {
     size_t idx = 0;
-	MyVector<T>::ConstVectorIterator tmp = cbegin(); 
+    MyVector<T>::ConstVectorIterator tmp = cbegin(); 
     while ((tmp != cend()) || (tmp != it)) {
-		idx++;
+	idx++;
         tmp++;
     }
     insert(idx, value);
@@ -216,8 +213,8 @@ void MyVector<T>::popBack() {
 template<class T>
 void MyVector<T>::erase(const size_t idx) {
     if (idx >= _size) {
-		throw std::out_of_range("Called erase(idx) : idx >= size of vector");
-	}
+	throw std::out_of_range("Called erase(idx) : idx >= size of vector");
+    }
     for (size_t i = idx; i < _size; i++) {
         _data[i] = _data[i + 1];
     }
@@ -227,11 +224,11 @@ void MyVector<T>::erase(const size_t idx) {
 template<class T>
 void MyVector<T>::erase(const size_t idx, const size_t len) {
     if (idx >= _size) {
-		throw std::out_of_range("Called erase(idx) : idx >= size of vector");
-	}
+	throw std::out_of_range("Called erase(idx) : idx >= size of vector");
+    }
     if (idx + len >= _size) {
-		throw std::out_of_range("Called erase(idx) : idx + len >= size of vector");
-	}
+	throw std::out_of_range("Called erase(idx) : idx + len >= size of vector");
+    }
     for (size_t i = idx; i < _size; i++) {
         _data[i] = _data[i + len];
     }
@@ -243,15 +240,15 @@ template<class T>
 typename MyVector<T>::ConstVectorIterator MyVector<T>::find(const T& value, bool isBegin) const {
     MyVector<T>::ConstVectorIterator it = cend();
     MyVector<T>::ConstVectorIterator tmp = cbegin();
-	while (tmp != cend()) {
-		if (*tmp == value) {
-			it = tmp;
-			if (isBegin == true) {
-				break;
-			}
-		}
+    while (tmp != cend()) {
+	if (*tmp == value) {
+	    it = tmp;
+	    if (isBegin == true) {
+		break;
+	    }
 	}
-	return it;
+    }
+    return it;
 }
 
 
