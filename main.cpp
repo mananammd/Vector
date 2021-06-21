@@ -29,9 +29,11 @@ for (int i = 0; i < test.size(); i++) {
 }
 cout << endl;
 test.erase(4, 2);
-
+test.pushFront(9);
 for (int i = 0; i < test.size(); i++) {
     cout << test[i] << " ";
 }
 cout << endl;
+
+
 }

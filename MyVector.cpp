@@ -5,12 +5,7 @@ MyVector<T>::MyVector(size_t size, ResizeStrategy strategy, float coef) {
     _size = size;
     _strategy = strategy;
     _coef = coef;
-    if (strategy == ResizeStrategy::Additive) {
-        _capacity = (_size + coef);
-    }
-    if (strategy == ResizeStrategy::Multiplicative) {
-        _capacity = (_size * coef);
-    }
+    strategyExpand(_strategy, _coef);
     _data = new T[_capacity];
 	for(size_t i = 0; i < _size; ++i) {
 		_data[i] = T();
@@ -22,12 +17,7 @@ MyVector<T>::MyVector(size_t size, T value, ResizeStrategy strategy, float coef)
     _size = size;
     _strategy = strategy;
     _coef = coef;
-    if (strategy == ResizeStrategy::Additive) {
-        _capacity = (_size + coef);
-    }
-    if (strategy == ResizeStrategy::Multiplicative) {
-        _capacity = (_size * coef);
-    }
+    strategyExpand(_strategy, _coef);
     _data = new T[_capacity];
 	for(size_t i = 0; i < _size; ++i) {
 		_data[i] = value;
@@ -68,7 +58,8 @@ MyVector<T>::MyVector(MyVector&& other) noexcept {
     other._data = nullptr;
     other._size = 0;
     other._capacity = 0;
-    other._coef = 0;
+    other._coef = 1.5f;
+    other._strategy = ResizeStrategy::Multiplicative;
 }
 
 template<class T>
@@ -79,6 +70,11 @@ MyVector<T>& MyVector<T>::operator=(MyVector&& other) noexcept {
         std::swap(this->_size, other._size);
         std::swap(this->_coef, other._coef);
         std::swap(this->_strategy, other._strategy);
+        other._data = nullptr;
+        other._size = 0;
+        other._capacity = 0;
+        other._coef = 1.5f;
+        other._strategy = ResizeStrategy::Multiplicative;
     }
     return *this;
 }
@@ -149,11 +145,12 @@ const T& MyVector<T>::operator[](const size_t idx) const {
 
 template<class T>
 void MyVector<T>::pushBack(const T& value) {
-    _size++;
-    if (_size >= _capacity) {
-        reserve(_size);
-    }
-    _data[_size - 1] = value;
+    insert(_size, value);
+}
+
+template<class T>
+void MyVector<T>::pushFront(const T& value) {
+    insert(0, value);
 }
 
 template<class T>
@@ -163,7 +160,7 @@ void MyVector<T>::insert(const size_t idx, const T& value) {
 	}
     _size++;
     if (_size >= _capacity) {
-        reserve(_size);
+        expand();
     }
     for (size_t i = _size; i > idx; i--) {
         _data[i] = _data[i - 1];
@@ -178,7 +175,7 @@ void MyVector<T>::insert(const size_t idx, const MyVector& value) {
 	}
     _size += value._size;
     if (_size >= _capacity) {
-        reserve(_size);
+        expand();
     }
     for (size_t i = _size; i > idx; i--) {
         _data[i] = _data[i - value._size];
@@ -260,15 +257,12 @@ typename MyVector<T>::ConstVectorIterator MyVector<T>::find(const T& value, bool
 
 template<class T>
 void MyVector<T>::reserve(const size_t capacity) {
-    if (capacity > _capacity) {
-        T* newData = new T[capacity];
-        for (size_t i = 0; i < _size; i++) {
-            newData[i] = _data[i];
-        }
-        _capacity = capacity;
-        delete[] _data;
-        _data = newData;
+    T* newData = new T[capacity];
+    for (size_t i = 0; i < _size; i++) {
+        newData[i] = _data[i];
     }
+    delete[] _data;
+    _data = newData;
 }
 
 template<class T>
@@ -282,6 +276,29 @@ void MyVector<T>::resize(const size_t size, const T& value) {
         }
     }
     _size = size;
+}
+
+template<class T>
+void MyVector<T>::expand() {
+    while (loadFactor() > 0.8) {
+        if (loadFactor() > 1.1) {
+            strategyExpand(ResizeStrategy::Multiplicative, 1.5 * loadFactor());
+        }
+        else {
+            strategyExpand(ResizeStrategy::Additive, 2 * abs(_capacity - _size));
+        }
+    }
+    reserve(_capacity);
+}
+
+template<class T>
+void MyVector<T>::strategyExpand(ResizeStrategy strategy, float coef) {
+    if (strategy == ResizeStrategy::Additive) {
+        _capacity = (_size + coef);
+    }
+    if (strategy == ResizeStrategy::Multiplicative) {
+        _capacity = (_size * coef);
+    }
 }
 
 template<class T>

@@ -106,6 +106,7 @@ public:
     // добавить в конец,
     // должен работать за amort(O(1))
     void pushBack(const T& value);
+    void pushFront(const T& value);
     // вставить,
     // должен работать за O(n)
     void insert(const size_t i, const T& value);     // версия для одного значения
@@ -134,7 +135,9 @@ public:
     // если новый размер больше текущего, то новые элементы забиваются value
     // если меньше - обрезаем вектор
     void resize(const size_t size, const T& value = T());
-    
+    //Расширение _capacity
+    void expand();
+    void strategyExpand(ResizeStrategy = ResizeStrategy::Multiplicative, float coef = 1.5f);
     // очистка вектора, без изменения capacity
     void clear();
 private:
