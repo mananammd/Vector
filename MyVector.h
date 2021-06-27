@@ -30,8 +30,8 @@ public:
         using reference         = T&;  
 
         VectorIterator(T* ptr);
-	VectorIterator(const VectorIterator& copy);
-	VectorIterator operator=(const VectorIterator& copy);
+		VectorIterator(const VectorIterator& copy);
+		VectorIterator operator=(const VectorIterator& copy);
 
         VectorIterator& operator++();
         VectorIterator operator++(int);
@@ -40,7 +40,7 @@ public:
         reference operator*() const;
         pointer operator->();
         bool operator!=(const VectorIterator& other) const;
-	bool operator==(const VectorIterator& other) const;
+		bool operator==(const VectorIterator& other) const;
 
     private:
         T* _ptr;
@@ -56,8 +56,8 @@ public:
         using reference         = const T&;  
 
         ConstVectorIterator(T* ptr);
-	ConstVectorIterator(const ConstVectorIterator& copy);
-	ConstVectorIterator operator=(const ConstVectorIterator& copy);
+		ConstVectorIterator(const ConstVectorIterator& copy);
+		ConstVectorIterator operator=(const ConstVectorIterator& copy);
 
         ConstVectorIterator& operator++();
         ConstVectorIterator operator++(int);
@@ -66,7 +66,7 @@ public:
         reference operator*() const;
         pointer operator->();
         bool operator!=(const ConstVectorIterator& other) const;
-	bool operator==(const ConstVectorIterator& other) const;
+		bool operator==(const ConstVectorIterator& other) const;
 
     private:
         T* _ptr;
@@ -148,18 +148,6 @@ private:
     float _coef;
 };
 
-template class MyVector<int>;
-template class MyVector<char>;
-template class MyVector<unsigned char>;
-template class MyVector<short>;
-template class MyVector<long>;
-template class MyVector<long long>;
-template class MyVector<unsigned short>;
-template class MyVector<unsigned int>;
-template class MyVector<unsigned long>;
-template class MyVector<unsigned long long>;
-template class MyVector<float>;
-template class MyVector<double>;
 
 template<class T>
 MyVector<T>::VectorIterator::VectorIterator(T* ptr) {
